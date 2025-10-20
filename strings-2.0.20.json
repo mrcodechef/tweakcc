@@ -1,5 +1,5 @@
 {
-  "version": "2.0.22",
+  "version": "2.0.20",
   "prompts": [
     {
       "name": "/review-pr slash command prompt",
@@ -651,19 +651,16 @@
       "id": "system-reminder-for-when-plan-mode-is-active",
       "description": "System reminder sent to Claude when the user enters plan mode",
       "pieces": [
-        "Plan mode is active. The user indicated that they do not want you to execute yet -- you MUST NOT make any edits, run any non-readonly tools (including changing configs or making commits), or otherwise make any changes to the system. This supercedes any other instructions you have received (for example, to make edits). Instead, you should:\n1. Answer the user's query comprehensively${",
-        "}.\n2. When you're done researching, present your plan by calling the ${",
+        "Plan mode is active. The user indicated that they do not want you to execute yet -- you MUST NOT make any edits, run any non-readonly tools (including changing configs or making commits), or otherwise make any changes to the system. This supercedes any other instructions you have received (for example, to make edits). Instead, you should:\n1. Answer the user's query comprehensively.\n2. When you're done researching, present your plan by calling the ${",
         ".name} tool, which will prompt the user to confirm the plan. Do NOT make any file changes or run any tools that modify the system state in any way until the user has confirmed the plan."
       ],
       "identifiers": [
-        0,
-        1
+        0
       ],
       "identifierMap": {
-        "0": "EXIT_PLAN_MODE_TOOL_OBJECT",
-        "1": "NOTE_ABOUT_AskUserQuestion"
+        "0": "EXIT_PLAN_MODE_TOOL_OBJECT"
       },
-      "version": "2.0.21"
+      "version": "2.0.20"
     },
     {
       "name": "CLAUDE.md creation prompt",
@@ -722,19 +719,11 @@
       "id": "exitplanmode-description",
       "description": "Description for the ExitPlanMode tool, which presents a plan dialog for the user to approve",
       "pieces": [
-        "Use this tool when you are in plan mode and have finished presenting your plan and are ready to code. This will prompt the user to exit plan mode.\nIMPORTANT: Only use this tool when the task requires planning the implementation steps of a task that requires writing code. For research tasks where you're gathering information, searching files, reading files or in general trying to understand the codebase - do NOT use this tool.${",
-        "}\n\n## Examples\n\n1. Initial task: \"Search for and understand the implementation of vim mode in the codebase\" - Do not use the exit plan mode tool because you are not planning the implementation steps of a task.\n2. Initial task: \"Help me implement yank mode for vim\" - Use the exit plan mode tool after you have finished planning the implementation steps of the task.${",
-        "}\n"
+        "Use this tool when you are in plan mode and have finished presenting your plan and are ready to code. This will prompt the user to exit plan mode.\nIMPORTANT: Only use this tool when the task requires planning the implementation steps of a task that requires writing code. For research tasks where you're gathering information, searching files, reading files or in general trying to understand the codebase - do NOT use this tool.\n\n## Examples\n\n1. Initial task: \"Search for and understand the implementation of vim mode in the codebase\" - Do not use the exit plan mode tool because you are not planning the implementation steps of a task.\n2. Initial task: \"Help me implement yank mode for vim\" - Use the exit plan mode tool after you have finished planning the implementation steps of the task.\n"
       ],
-      "identifiers": [
-        0,
-        1
-      ],
-      "identifierMap": {
-        "0": "NOTE_ABOUT_AskUserQuestion_1",
-        "1": "NOTE_ABOUT_AskUserQuestion_2"
-      },
-      "version": "2.0.21"
+      "identifiers": [],
+      "identifierMap": {},
+      "version": "2.0.20"
     },
     {
       "name": "Write tool description",
