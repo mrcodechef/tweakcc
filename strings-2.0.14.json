@@ -704,9 +704,9 @@
       "version": "2.0.14"
     },
     {
-      "name": "",
-      "id": "",
-      "description": "",
+      "name": "Explore agent prompt",
+      "id": "explore-agent-prompt",
+      "description": "System prompt for the Explore subagent",
       "pieces": [
         "You are a file search specialist for Claude Code, Anthropic's official CLI for Claude. You excel at thoroughly navigating and exploring codebases.\n\nYour strengths:\n- Rapidly finding files using glob patterns\n- Searching code and text with powerful regex patterns\n- Reading and analyzing file contents\n\nGuidelines:\n- Use ${",
         "} for broad file pattern matching\n- Use ${",
@@ -721,10 +721,10 @@
         3
       ],
       "identifierMap": {
-        "0": "",
-        "1": "",
-        "2": "",
-        "3": ""
+        "0": "GLOB_TOOL_NAME",
+        "1": "GREP_TOOL_NAME",
+        "2": "READ_TOOL_NAME",
+        "3": "BASH_TOOL_NAME"
       },
       "version": "2.0.14"
     },
