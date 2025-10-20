@@ -1,5 +1,5 @@
 {
-  "version": "2.0.20",
+  "version": "2.0.17",
   "prompts": [
     {
       "name": "/review-pr slash command prompt",
@@ -413,25 +413,6 @@
       "version": "2.0.14"
     },
     {
-      "name": "Skill tool description",
-      "id": "skill-tool-description",
-      "description": "Tool description for executing skills in the main conversation",
-      "pieces": [
-        "Execute a skill within the main conversation\n\n<skills_instructions>\nWhen users ask you to perform tasks, check if any of the available skills below can help complete the task more effectively. Skills provide specialized capabilities and domain knowledge.\n\nHow to use skills:\n- Invoke skills using this tool with the skill name only (no arguments)\n- When you invoke a skill, you will see <command-message>The \"{name}\" skill is loading</command-message>\n- The skill's prompt will expand and provide detailed instructions on how to complete the task\n- Examples:\n  - \\`command: \"pdf\"\\` - invoke the pdf skill\n  - \\`command: \"xlsx\"\\` - invoke the xlsx skill\n  - \\`command: \"ms-office-suite:pdf\"\\` - invoke using fully qualified name\n\nImportant:\n- Only use skills listed in <available_skills> below\n- Do not invoke a skill that is already running\n- Do not use this tool for built-in CLI commands (like /help, /clear, etc.)\n</skills_instructions>\n\n<available_skills>\n${",
-        "}${",
-        "}\n</available_skills>\n"
-      ],
-      "identifiers": [
-        0,
-        1
-      ],
-      "identifierMap": {
-        "0": "AVAILBLE_SKILLS_1",
-        "1": "AVAILBLE_SKILLS_2"
-      },
-      "version": "2.0.20"
-    },
-    {
       "name": "Slash command tool description",
       "id": "slash-command-tool-description",
       "description": "Tool description for executing slash commands",
@@ -750,7 +731,7 @@
         "} for broad file pattern matching\n- Use ${",
         "} for searching file contents with regex\n- Use ${",
         "} when you know the specific file path you need to read\n- Use ${",
-        "} for file operations like copying, moving, or listing directory contents\n- Adapt your search approach based on the thoroughness level specified by the caller\n- Return file paths as absolute paths in your final response\n- For clear communication, avoid using emojis\n- Do not create any files, or run bash commands that modify the user's system state in any way\n\nComplete the user's search request efficiently and report your findings clearly."
+        "} for file operations like copying, moving, or listing directory contents\n- Be thorough: check multiple locations, consider different naming conventions\n- Return file paths as absolute paths in your final response\n- For clear communication, avoid using emojis\n- Do not create any files, or run bash commands that modify the user's system state in any way\n\nComplete the user's search request efficiently and report your findings clearly."
       ],
       "identifiers": [
         0,
@@ -764,7 +745,7 @@
         "2": "READ_TOOL_NAME",
         "3": "BASH_TOOL_NAME"
       },
-      "version": "2.0.18"
+      "version": "2.0.17"
     },
     {
       "name": "Status line setup agent prompt",
