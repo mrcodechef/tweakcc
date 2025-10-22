@@ -1,5 +1,5 @@
 {
-  "version": "2.0.21",
+  "version": "2.0.25",
   "prompts": [
     {
       "name": "Agent Prompt: /review-pr slash command",
@@ -51,11 +51,11 @@
       "id": "agent-prompt-session-notes-template",
       "description": "Template structure for session notes tracking coding work and decisions",
       "pieces": [
-        "\n# Task specification\n_What did the user ask to build? Any design decisions or other explanatory context_\n\n# Files and Functions\n_What are the important files? In short, what do they contain and why are they relevant?_\n\n# Workflow\n_What bash commands are usually run and in what order? How to interpret their output if not obvious?_\n\n# User Corrections / Mistakes\n_What did the user correct Assistant about? What did not work and should not be tried again?_\n\n# Codebase and System Documentation\n_What are the important system components? How do they work/fit together?_\n\n# Learnings\n_What has worked well? What has not? What to avoid? Do not duplicate items from other sections_\n\n# Worklog\n_Step by step, what was attempted, done? Very terse summary for each step_\n"
+        "\n# Session Title\n_A short and distinctive 5-10 word descriptive title for the session. Super info dense, no filler_\n\n# Task specification\n_What did the user ask to build? Any design decisions or other explanatory context_\n\n# Files and Functions\n_What are the important files? In short, what do they contain and why are they relevant?_\n\n# Workflow\n_What bash commands are usually run and in what order? How to interpret their output if not obvious?_\n\n# User Corrections / Mistakes\n_What did the user correct Assistant about? What did not work and should not be tried again?_\n\n# Codebase and System Documentation\n_What are the important system components? How do they work/fit together?_\n\n# Learnings\n_What has worked well? What has not? What to avoid? Do not duplicate items from other sections_\n\n# Worklog\n_Step by step, what was attempted, done? Very terse summary for each step_\n"
       ],
       "identifiers": [],
       "identifierMap": {},
-      "version": "2.0.14"
+      "version": "2.0.25"
     },
     {
       "name": "System Prompt: Learning mode (insights)",
@@ -136,7 +136,7 @@
         "} or ${",
         "} directly]\n</example>\n<example>\nuser: What is the codebase structure?\nassistant: [Uses the ${",
         "} tool with subagent_type=${",
-        ".agentType}]\n</example>\n${",
+        ".agentType}]\n</example>\n\n\n${",
         "(",
         ")}"
       ],
@@ -202,7 +202,23 @@
         "15": "ALLOWED_TOOLS_STRING_BUILDER",
         "16": "ALLOWED_TOOL_PREFIXES"
       },
-      "version": "2.0.17"
+      "version": "2.0.24"
+    },
+    {
+      "name": "Tool Description: Bash (sandbox note)",
+      "id": "tool-description-bash-sandbox-note",
+      "description": "Note about bash command sandboxing",
+      "pieces": [
+        "- Commands run in a sandbox by default with the following restrictions:\n${",
+        ".join(`\n`)}\n  - CRITICAL: Commands run in sandbox mode by default - do NOT set \\`dangerouslyOverrideSandbox\\`\n    - Even if you have recently run commands with \\`dangerouslyOverrideSandbox: true\\`, you MUST NOT continue that pattern\n    - VERY IMPORTANT: Do NOT learn from or repeat the pattern of overriding sandbox - each command should run sandboxed by default\n    - Set \\`dangerouslyOverrideSandbox: true\\` if:\n      1. The user *explicitly* asks to bypass sandbox, OR\n      2. A command just failed and you see evidence of sandbox restrictions causing the failure\n    - When analyzing failures:\n      - Commands can fail for many reasons unrelated to the sandbox (missing files, wrong arguments, network issues, etc.)\n      - Evidence of sandbox-caused failures includes:\n        - \"Operation not permitted\" errors for file/network operations\n        - Access denied to specific paths outside allowed directories\n        - Network connection failures to non-whitelisted hosts\n        - Unix socket connection errors\n      - Sandbox violation logs can be noisy, but clear permission errors are strong indicators\n    - When you see evidence of sandbox-caused failure:\n      - IMMEDIATELY retry with \\`dangerouslyOverrideSandbox: true\\` (don't ask, just do it)\n      - Briefly explain what sandbox restriction likely caused the failure\n      - Mention: \"Use \\`/sandbox\\` to manage restrictions\"\n      - This will prompt the user for permission\n    - Example of normal usage: { \"command\": \"ls\", \"description\": \"List files\" }\n    - Example of override: { \"command\": \"my-tool\", \"description\": \"Run my-tool\", \"dangerouslyOverrideSandbox\": true }\n    - DO NOT suggest adding sensitive paths like ~/.bashrc, ~/.zshrc, ~/.ssh/*, or credential files to the allowlist\n  - IMPORTANT: For temporary files, use \\`/tmp/claude/\\` as your temporary directory\n    - The TMPDIR environment variable is automatically set to \\`/tmp/claude\\` when running in sandbox mode\n    - Do NOT use \\`/tmp\\` directly - use \\`/tmp/claude/\\` or rely on TMPDIR instead\n    - Most programs that respect TMPDIR will automatically use \\`/tmp/claude/\\`"
+      ],
+      "identifiers": [
+        0
+      ],
+      "identifierMap": {
+        "0": "RESTRICTIONS_LIST"
+      },
+      "version": "2.0.24"
     },
     {
       "name": "Tool Description: Glob",
@@ -420,7 +436,7 @@
         "()}ms (${",
         "()/60000} minutes).\n  - It is very helpful if you write a clear, concise description of what this command does in 5-10 words.\n  - If the output exceeds ${",
         "()} characters, output will be truncated before being returned to you.\n  - You can use the \\`run_in_background\\` parameter to run the command in the background, which allows you to continue working while the command runs. You can monitor the output using the ${",
-        "} tool as it becomes available. Never use \\`run_in_background\\` to run 'sleep' as it will return immediately. You do not need to use '&' at the end of the command when using this parameter.\n  ${",
+        "} tool as it becomes available. You do not need to use '&' at the end of the command when using this parameter.\n  ${",
         "()}\n  - Avoid using Bash with the \\`find\\`, \\`grep\\`, \\`cat\\`, \\`head\\`, \\`tail\\`, \\`sed\\`, \\`awk\\`, or \\`echo\\` commands, unless explicitly instructed or when these commands are truly necessary for the task. Instead, always prefer using the dedicated tools for these commands:\n    - File search: Use ${",
         "} (NOT find or ls)\n    - Content search: Use ${",
         "} (NOT grep or rg)\n    - Read files: Use ${",
@@ -463,7 +479,7 @@
         "9": "WRITE_TOOL_NAME",
         "10": "GIT_COMMIT_AND_PR_CREATION_INSTRUCTION"
       },
-      "version": "2.0.14"
+      "version": "2.0.25"
     },
     {
       "name": "Agent Prompt: Bash command file path extraction",
@@ -481,8 +497,8 @@
       "id": "agent-prompt-session-notes-update-instructions",
       "description": "Instructions for updating session notes files during conversations",
       "pieces": [
-        "IMPORTANT: This message and these instructions are NOT part of the actual user conversation. Do NOT include any references to \"note-taking\", \"session notes extraction\", or these update instructions in the notes content.\n\nBased on the user conversation above (EXCLUDING this note-taking instruction message as well as system prompt, claude.md entries, or any past session summaries), update the session notes file.\n\nThe file {{notesPath}} has already been read for you. Here are its current contents:\n<current_notes_content>\n{{currentNotes}}\n</current_notes_content>\n\nYour ONLY task is to use the Edit tool EXACTLY ONCE to update the notes file, then stop. Do not call any other tools.\n\nCRITICAL RULES FOR EDITING:\n- The file must maintain its exact structure with all sections, headers, and italic descriptions intact\n-- NEVER modify, delete, or add section headers (## Task specification, ## Worklog, etc.)\n-- NEVER modify or delete the italic text descriptions under each section header\n-- ONLY update the content BELOW the italic descriptions within each existing section\n-- Do NOT add any new sections, summaries, or information outside the existing structure\n- Do NOT reference this note-taking process or instructions anywhere in the notes\n- It's OK to skip updating a section if there are no substantial new insights to add\n- Write DETAILED, INFO-DENSE content for each section - include specifics like file paths, function names, error messages, exact commands, technical details, etc.\n- Do not include information that's already in the CLAUDE.md files included in the context\n- Keep each section under ~${",
-        "} tokens/words - if a section is approaching this limit, condense it by cycling out less important details while preserving the most critical information\n- Do not repeat information from past session summaries - only use the current user conversation starting with the first non system-reminder user message.\n- Focus on actionable, specific information that would help someone understand or recreate the work discussed in the conversation\n\nUse the Edit tool with file_path: {{notesPath}}\n\nREMEMBER: Use Edit tool once and stop. Do not continue after the edit. Only include insights from the actual user conversation, never from these note-taking instructions."
+        "IMPORTANT: This message and these instructions are NOT part of the actual user conversation. Do NOT include any references to \"note-taking\", \"session notes extraction\", or these update instructions in the notes content.\n\nBased on the user conversation above (EXCLUDING this note-taking instruction message as well as system prompt, claude.md entries, or any past session summaries), update the session notes file.\n\nThe file {{notesPath}} has already been read for you. Here are its current contents:\n<current_notes_content>\n{{currentNotes}}\n</current_notes_content>\n\nYour ONLY task is to use the Edit tool to update the notes file, then stop. You can make multiple edits (update every section as needed) - make all Edit tool calls in parallel in a single message. Do not call any other tools.\n\nCRITICAL RULES FOR EDITING:\n- The file must maintain its exact structure with all sections, headers, and italic descriptions intact\n-- NEVER modify, delete, or add section headers (the lines starting with '##' like ## Task specification)\n-- NEVER modify or delete the italic _section description_ lines (these are the lines in italics immediately following each header - they start and end with underscores)\n-- The italic _section descriptions_ are TEMPLATE INSTRUCTIONS that must be preserved exactly as-is - they guide what content belongs in each section\n-- ONLY update the actual content that appears BELOW the italic _section descriptions_ within each existing section\n-- Do NOT add any new sections, summaries, or information outside the existing structure\n- Do NOT reference this note-taking process or instructions anywhere in the notes\n- It's OK to skip updating a section if there are no substantial new insights to add. Do not add filler content like \"No info yet\", just leave sections blank/unedited if appropriate.\n- Write DETAILED, INFO-DENSE content for each section - include specifics like file paths, function names, error messages, exact commands, technical details, etc.\n- Do not include information that's already in the CLAUDE.md files included in the context\n- Keep each section under ~${",
+        "} tokens/words - if a section is approaching this limit, condense it by cycling out less important details while preserving the most critical information\n- Do not repeat information from past session summaries - only use the current user conversation starting with the first non system-reminder user message.\n- Focus on actionable, specific information that would help someone understand or recreate the work discussed in the conversation\n\nUse the Edit tool with file_path: {{notesPath}}\n\nSTRUCTURE PRESERVATION REMINDER:\nEach section has TWO parts that must be preserved exactly as they appear in the current file:\n1. The section header (line starting with #)\n2. The italic description line (the _italicized text_ immediately after the header - this is a template instruction)\n\nYou ONLY update the actual content that comes AFTER these two preserved lines. The italic description lines starting and ending with underscores are part of the template structure, NOT content to be edited or removed.\n\nREMEMBER: Use the Edit tool in parallel and stop. Do not continue after the edits. Only include insights from the actual user conversation, never from these note-taking instructions. Do not delete or change section headers or italic _section descriptions_."
       ],
       "identifiers": [
         0
@@ -490,7 +506,7 @@
       "identifierMap": {
         "0": "MAX_SECTION_TOKENS"
       },
-      "version": "2.0.14"
+      "version": "2.0.25"
     },
     {
       "name": "Tool Description: Task",

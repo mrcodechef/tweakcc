@@ -1,5 +1,5 @@
 {
-  "version": "2.0.21",
+  "version": "2.0.24",
   "prompts": [
     {
       "name": "Agent Prompt: /review-pr slash command",
@@ -136,7 +136,7 @@
         "} or ${",
         "} directly]\n</example>\n<example>\nuser: What is the codebase structure?\nassistant: [Uses the ${",
         "} tool with subagent_type=${",
-        ".agentType}]\n</example>\n${",
+        ".agentType}]\n</example>\n\n\n${",
         "(",
         ")}"
       ],
@@ -202,7 +202,23 @@
         "15": "ALLOWED_TOOLS_STRING_BUILDER",
         "16": "ALLOWED_TOOL_PREFIXES"
       },
-      "version": "2.0.17"
+      "version": "2.0.24"
+    },
+    {
+      "name": "Tool Description: Bash (sandbox note)",
+      "id": "tool-description-bash-sandbox-note",
+      "description": "Note about bash command sandboxing",
+      "pieces": [
+        "- Commands run in a sandbox by default with the following restrictions:\n${",
+        ".join(`\n`)}\n  - CRITICAL: Commands run in sandbox mode by default - do NOT set \\`dangerouslyOverrideSandbox\\`\n    - Even if you have recently run commands with \\`dangerouslyOverrideSandbox: true\\`, you MUST NOT continue that pattern\n    - VERY IMPORTANT: Do NOT learn from or repeat the pattern of overriding sandbox - each command should run sandboxed by default\n    - Set \\`dangerouslyOverrideSandbox: true\\` if:\n      1. The user *explicitly* asks to bypass sandbox, OR\n      2. A command just failed and you see evidence of sandbox restrictions causing the failure\n    - When analyzing failures:\n      - Commands can fail for many reasons unrelated to the sandbox (missing files, wrong arguments, network issues, etc.)\n      - Evidence of sandbox-caused failures includes:\n        - \"Operation not permitted\" errors for file/network operations\n        - Access denied to specific paths outside allowed directories\n        - Network connection failures to non-whitelisted hosts\n        - Unix socket connection errors\n      - Sandbox violation logs can be noisy, but clear permission errors are strong indicators\n    - When you see evidence of sandbox-caused failure:\n      - IMMEDIATELY retry with \\`dangerouslyOverrideSandbox: true\\` (don't ask, just do it)\n      - Briefly explain what sandbox restriction likely caused the failure\n      - Mention: \"Use \\`/sandbox\\` to manage restrictions\"\n      - This will prompt the user for permission\n    - Example of normal usage: { \"command\": \"ls\", \"description\": \"List files\" }\n    - Example of override: { \"command\": \"my-tool\", \"description\": \"Run my-tool\", \"dangerouslyOverrideSandbox\": true }\n    - DO NOT suggest adding sensitive paths like ~/.bashrc, ~/.zshrc, ~/.ssh/*, or credential files to the allowlist\n  - IMPORTANT: For temporary files, use \\`/tmp/claude/\\` as your temporary directory\n    - The TMPDIR environment variable is automatically set to \\`/tmp/claude\\` when running in sandbox mode\n    - Do NOT use \\`/tmp\\` directly - use \\`/tmp/claude/\\` or rely on TMPDIR instead\n    - Most programs that respect TMPDIR will automatically use \\`/tmp/claude/\\`"
+      ],
+      "identifiers": [
+        0
+      ],
+      "identifierMap": {
+        "0": "RESTRICTIONS_LIST"
+      },
+      "version": "2.0.24"
     },
     {
       "name": "Tool Description: Glob",
